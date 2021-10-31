@@ -1,14 +1,14 @@
-import LoginPage as LP
-from tkinter import *
+import Backend 
+import LoginPage
 
-root = TK()
-
-myLabel = Label(root, text="Hello World!")
 
 def main():
-    # Create an instance of a Login Page and start program
-    login = LP.LoginPage()
-    login.start()
+    #Initialize DB
+    Backend.initializeDB()
+
+    # Log in
+    LoginPage.start()
+
 
 if __name__ == '__main__':
     main()
