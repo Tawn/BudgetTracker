@@ -7,13 +7,6 @@ class main {
     +LoginPage.start()
 }
 
-<> diamond
-diamond - main::backend
-diamond - main::login
-note left of diamond
-    Method calls
-end note
-
 entity LoginPage {
     #import Backend
     #import Dashboard
@@ -41,41 +34,52 @@ end note
 package SQLite <<database>> {  
     entity Backend {
         #import sqlite3
-        #connection : cursor
+        #import datetime
         -table : users {PK username, pw}
         -table : entries {FK username, date, data}
         +initializeDB()
         +checkLogin(username, pw)
         +checkUser(username)
-        +setEntries(username, pw)
+        +insertUser(username, pw)
+        +recentTransactions(username)
+        +balance(username)    
+        +addTransaction(username, amt, desc)
+        +getTransactions(username)
+        +printDB()
     }
 }
 
 entity Dashboard {
     #Backend : backend
-    #Output : Finances
-    +backend.getEntries()
-    +backend.inputEntry()
-    +while(exit == false){ <user actions> }
-    +getEntries()
-    +setEntry()
-    +exit()
+    +start(username)
+    +recentTransactions(username)
+    +createTransaction(username)
+    +viewTransaction(username)
 }
 
-note right of Dashboard
-    output finances
+note right of Dashboard::start
+    Start: begins user actions (loops if invalid inputs):
+        1. See all -> Backend.getTransactions()
+        2. Create -> Backend.addTransaction()
+        3. Exit program 
+end note
+note right of Dashboard::recentTransactions
+    Calls Backend.recentTransactions(username)
+    Outputs up to 5 of the last 5 transactions
 end note
 
-main -right-> LoginPage : log in
-main -> Backend : initialize DB
+main -right-> LoginPage : LoginPage.start()
+main -down-> Backend : Backend.initializeDB()
 
+LoginPage .left.> main : exit
 LoginPage --> Backend : verify/insert user
-LoginPage ..> main : exit program
-LoginPage --> Dashboard : log in success
+LoginPage -down-> Dashboard : Dashboard.start(username)
 
-Dashboard -right-> Backend : get/add/delete entry
+Dashboard ..> LoginPage : exit
+Dashboard -left-> Backend : create/view Transactions
 
 Backend ..> LoginPage
-Backend ..> Dashboard 
+Backend .right.> Dashboard 
+
 
 @enduml
