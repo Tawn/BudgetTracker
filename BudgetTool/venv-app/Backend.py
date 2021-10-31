@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 
 # initialize SQLite 
 connection = sqlite3.connect('users.db')
@@ -27,7 +28,7 @@ def insertUser(username, pw):
 	print(username + " is now registered!")
 
 def recentTransactions(user):
-	query  = "SELECT * FROM transactions WHERE username = \"" + user + "\" ORDER BY setDate DESC LIMIT 5"
+	query  = "SELECT * FROM transactions WHERE username = \"" + user + "\" ORDER BY setDate LIMIT 5"
 	cursor.execute(query)
 	return cursor.fetchall()
 
@@ -39,6 +40,15 @@ def balance(user):
 	for x in cursor.fetchall():
 		balance += x[0]
 	return balance
+
+def addTransaction(user, amt, desc):
+	curDate = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+	cursor.execute("INSERT INTO transactions VALUES (:setDate, :description, :amount, :username)", {'setDate': curDate, 'description': desc, 'amount': amt, 'username': user})
+
+def getTransactions(user):
+	query  = "SELECT * FROM transactions WHERE username = \"" + user + "\" ORDER BY setDate"
+	cursor.execute(query)
+	return cursor.fetchall()
 
 def printDB():
 	cursor.execute("SELECT * FROM users")
@@ -58,10 +68,6 @@ def initializeDB():
 		description TEXT, 
 		amount INT,
 		username TEXT, FOREIGN KEY(username) REFERENCES users(username))""")
-
-	accounts = (
-
-		)
 
 	# Insert data into users
 	cursor.execute("INSERT INTO users VALUES (:username, :password)", {'username': "Thanh", 'password': "t123"})
