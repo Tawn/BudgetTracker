@@ -9,7 +9,6 @@ def start():
 		# User Options
 		userInput = input("\nEnter the #s for the following options:\n1. Log in\n2. Create new user\n3. Exit\nInput: ")
 		userInput = int(userInput)
-		print(userInput)
 
 		# Check if log in is true 
 		# True: Log in to dashboard 
@@ -27,21 +26,17 @@ def start():
 	print("\nNow exiting...")
 
 def login():
-	print("\nLoginPage.login() called")
 	username = input("Enter a username: ")
 	pw = input("Enter a password: ")
 	loginSuccess = Backend.checkLogin(username, pw)
 	
 	
 	if loginSuccess: # Log in to dashboard
-		Dashboard.login(username)
+		Dashboard.start(username)
 	else: # Go back to User Options  
 		print("\n\nInvalid username or password.")
 
-	
-
 def createUser():
-	print("LoginPage.createUser() called")
 	username = input("\nEnter a username: ")
 	pw = input("Enter a password: ")
 	# 1. Check to see if user exists
@@ -51,6 +46,7 @@ def createUser():
 		Backend.insertUser(username, pw)
 	else: # Go back to User Options
 		print("\n\n User already exists.")
+
 
 
 
