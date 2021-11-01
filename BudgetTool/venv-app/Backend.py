@@ -5,57 +5,6 @@ from datetime import datetime
 connection = sqlite3.connect('users.db')
 cursor = connection.cursor()
 
-def checkLogin(username, pw):
-	query = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + pw + "'"
-	print(query)
-	cursor.execute(query)
-	result = cursor.fetchall()
-	if len(result) == 0:
-		return False
-	return True
-
-def checkUser(username):
-	query = "SELECT * FROM users WHERE username = '" + username + "'"
-	print(query)
-	cursor.execute(query)
-	result = cursor.fetchall()
-	if len(result) == 0:
-		return False
-	return True
-
-def insertUser(username, pw):
-	cursor.execute("INSERT INTO users VALUES (:username, :password)", {'username': username, 'password': pw})
-	print(username + " is now registered!")
-
-def recentTransactions(user):
-	query  = "SELECT * FROM transactions WHERE username = \"" + user + "\" ORDER BY setDate LIMIT 5"
-	cursor.execute(query)
-	return cursor.fetchall()
-
-def balance(user):
-	query = "SELECT amount FROM transactions WHERE username = \"" + user + "\""
-	cursor.execute(query)
-	
-	balance = 0
-	for x in cursor.fetchall():
-		balance += x[0]
-	return balance
-
-def addTransaction(user, amt, desc):
-	curDate = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-	cursor.execute("INSERT INTO transactions VALUES (:setDate, :description, :amount, :username)", {'setDate': curDate, 'description': desc, 'amount': amt, 'username': user})
-
-def getTransactions(user):
-	query  = "SELECT * FROM transactions WHERE username = \"" + user + "\" ORDER BY setDate"
-	cursor.execute(query)
-	return cursor.fetchall()
-
-def printDB():
-	cursor.execute("SELECT * FROM users")
-	print(cursor.fetchall())
-	cursor.execute("SELECT * FROM transactions")
-	print(cursor.fetchall())
-
 def initializeDB():
 	# User table
 	cursor.execute("""CREATE TABLE IF NOT EXISTS users(
@@ -83,4 +32,62 @@ def initializeDB():
 	cursor.execute("INSERT INTO transactions VALUES (:setDate, :description, :amount, :username)", {'setDate': "2021-10-20 12:00:00", 'description': "Paycheck", 'amount': 600, 'username': "Thanh"})
 
 	printDB()
+	
+def checkLogin(username, pw):
+	query = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + pw + "'"
+	print(query)
+	cursor.execute(query)
+	result = cursor.fetchall()
+	if len(result) == 0:
+		return False
+	return True
+
+def checkUser(username):
+	query = "SELECT * FROM users WHERE username = '" + username + "'"
+	print(query)
+	cursor.execute(query)
+	result = cursor.fetchall()
+	if len(result) == 0:
+		return False
+	return True
+
+# Adds new user to the user table
+def insertUser(username, pw):
+	cursor.execute("INSERT INTO users VALUES (:username, :password)", {'username': username, 'password': pw})
+	print(username + " is now registered!")
+
+# Get's up to 5 recent transactions
+def recentTransactions(user):
+	query  = "SELECT * FROM transactions WHERE username = \"" + user + "\" ORDER BY setDate LIMIT 5"
+	cursor.execute(query)
+	return cursor.fetchall()
+
+# Get's balance of all user's transactions
+def balance(user):
+	query = "SELECT amount FROM transactions WHERE username = \"" + user + "\""
+	cursor.execute(query)
+	
+	balance = 0
+	for x in cursor.fetchall():
+		balance += x[0]
+	return balance
+
+# Adds new transaction to the transaction table
+def addTransaction(user, amt, desc):
+	curDate = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+	cursor.execute("INSERT INTO transactions VALUES (:setDate, :description, :amount, :username)", {'setDate': curDate, 'description': desc, 'amount': amt, 'username': user})
+
+# Get's user's transactions
+def getTransactions(user):
+	query  = "SELECT * FROM transactions WHERE username = \"" + user + "\" ORDER BY setDate"
+	cursor.execute(query)
+	return cursor.fetchall()
+
+# Prints the both tables in the DB with their data
+def printDB():
+	cursor.execute("SELECT * FROM users")
+	print(cursor.fetchall())
+	cursor.execute("SELECT * FROM transactions")
+	print(cursor.fetchall())
+
 

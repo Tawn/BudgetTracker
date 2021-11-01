@@ -31,6 +31,7 @@ def start(username):
 
     print("\nNow exiting...")
 
+# Gets up to 5 recent transactions
 def recentTransactions(username):
     transactions = Backend.recentTransactions(username)
     print(transactions)
@@ -46,13 +47,13 @@ def recentTransactions(username):
     else:
         print("There are no recent transactions")
 
-# Todo Allow user to add an transaction
+# Adds a new transaction
 def createTransaction(user):
     amount = input("Please enter an amount of today's expense/income\nAmount: ")
     desc = input("What is this for?\nDescription: ")
     Backend.addTransaction(user, amount, desc)
 
-# Todo Allow user to see all transactions
+#  Get's all of user's transactions
 def viewTransactions(user):
     transactions = Backend.getTransactions(user)
     if(len(transactions) > 0):

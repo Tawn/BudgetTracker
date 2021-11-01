@@ -7,11 +7,14 @@ def start():
 
 	while (userInput != 3):
 		# User Options
-		userInput = input("\nEnter the #s for the following options:\n1. Log in\n2. Create new user\n3. Exit\nInput: ")
+		userInput = input("\nEnter the #s for the following options:\n"
+		+ "1. Log in\n"
+		+ "2. Create new user\n"
+		+ "3. Exit\n"
+		+ "Input: ")
 		userInput = int(userInput)
 
-		# Check if log in is true 
-		# True: Log in to dashboard 
+		# Log in to dashboard
 		if userInput == 1:
 			login()
 			

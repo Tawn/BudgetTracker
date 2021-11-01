@@ -50,7 +50,7 @@ package SQLite <<database>> {
 }
 
 entity Dashboard {
-    #Backend : backend
+    #import Backend
     +start(username)
     +recentTransactions(username)
     +createTransaction(username)
@@ -65,7 +65,7 @@ note right of Dashboard::start
 end note
 note right of Dashboard::recentTransactions
     Calls Backend.recentTransactions(username)
-    Outputs up to 5 of the last 5 transactions
+    Outputs up to 5 of the last transactions
 end note
 
 main -right-> LoginPage : LoginPage.start()
