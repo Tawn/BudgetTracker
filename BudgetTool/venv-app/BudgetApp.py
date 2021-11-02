@@ -1,12 +1,19 @@
 from LoginPage import LoginPage
 from Dashboard import Dashboard
+from Backend import Backend
 
 lp = LoginPage()
 dashboard = Dashboard()
+backend = Backend()
 
 class BudgetApp:
+
     lp = LoginPage()
+    backend.initializeDB()
+    
     def start(self):
+
+
         print("Welcome to your Budget App!")
         exit = False
         while not exit:
