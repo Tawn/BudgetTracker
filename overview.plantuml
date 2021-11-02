@@ -1,85 +1,71 @@
 @startuml Overview
 
 class main {
-    import Backend
-    import LoginPage
-    +Backend.initializeDB()
-    +LoginPage.start()
+    ..assignments..
+    app = BudgetApp()
+    __methods__
+    +main()
 }
 
-entity LoginPage {
-    #import Backend
-    #import Dashboard
+class BudgetApp {
+    ..assignments..
+    lp = LoginPage()
+    dashboard = Dashboard()
+    backend = Backend()
+    __methods__
     +start()
+    +backend.initializeDB()
+    +nextAction()
     +login()
     +createUser()
 }
 
-note right of LoginPage::start
-    Start: begins user actions (loops if invalid inputs):
-        1. Log in -> calls login()
-        2. Create user -> call createUser()
-        3. Exit program 
-end note
-
-note right of LoginPage::login
-    Calls Backend.checkLogin(username, pw)
-end note
-
-note right of LoginPage::createUser
-    - calls Backend.checkUser(username)
-    - calls Backend.createUser(username, pw)
-end note
-
-package SQLite <<database>> {  
-    entity Backend {
-        #import sqlite3
-        #import datetime
-        -table : users {PK username, pw}
-        -table : entries {FK username, date, data}
+package SQLite <<Database>> {
+    class Backend { 
+        ..attributes..
+        username
+        balance
+        __methods__
         +initializeDB()
-        +checkLogin(username, pw)
-        +checkUser(username)
-        +insertUser(username, pw)
-        +recentTransactions(username)
-        +balance(username)    
-        +addTransaction(username, amt, desc)
-        +getTransactions(username)
+        +checkLogin()
+        +checkUser()
+        +insertUser()
+        +recentTransactions()
+        +getBalance()
+        +addTransactions()
+        +getTransactions()
         +printDB()
     }
 }
 
-entity Dashboard {
-    #import Backend
-    +start(username)
-    +recentTransactions(username)
-    +createTransaction(username)
-    +viewTransaction(username)
+class LoginPage {
+    ..assignments..
+    backend = Backend()
+    __methods__
+    +login()
+    +createUser()
 }
 
-note right of Dashboard::start
-    Start: begins user actions (loops if invalid inputs):
-        1. See all -> Backend.getTransactions()
-        2. Create -> Backend.addTransaction()
-        3. Exit program 
-end note
-note right of Dashboard::recentTransactions
-    Calls Backend.recentTransactions(username)
-    Outputs up to 5 of the last transactions
-end note
+class Dashboard {
+    ..assignments..
+    backend = Backend()
+    __methods__
+    +start()
+    +nextAction()
+    +recentTransactions()
+    +createTransaction()
+    +viewTransaction()
+}
 
-main -right-> LoginPage : LoginPage.start()
-main -down-> Backend : Backend.initializeDB()
+main::main -down-> BudgetApp::start : app.start()
 
-LoginPage .left.> main : exit
+BudgetApp .up.> main : exit
+BudgetApp -down-> Backend : initialize DB
+BudgetApp -left-> LoginPage : login/create user
+BudgetApp -right-> Dashboard : dashboard.start()
+
 LoginPage --> Backend : verify/insert user
-LoginPage -down-> Dashboard : Dashboard.start(username)
 
-Dashboard ..> LoginPage : exit
-Dashboard -left-> Backend : create/view Transactions
-
-Backend ..> LoginPage
-Backend .right.> Dashboard 
-
-
+Dashboard ..> BudgetApp : exit
+Dashboard --> Backend : add/view transactions
 @enduml
