@@ -1,15 +1,12 @@
-import Backend 
-import LoginPage
+from BudgetApp import BudgetApp
+from Backend import Backend 
 
-
-def main():
-    
+def main():    
     #Initialize DB
-    Backend.initializeDB()
-
-    # Log in
-    LoginPage.start()
-
+    backend = Backend()
+    backend.initializeDB()
+    app = BudgetApp()
+    app.start()
 
 if __name__ == '__main__':
     main()
