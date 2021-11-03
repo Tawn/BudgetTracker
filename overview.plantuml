@@ -65,6 +65,7 @@ BudgetApp -left-> LoginPage : login/create user
 BudgetApp -right-> Dashboard : dashboard.start()
 
 LoginPage --> Backend : verify/insert user
+LoginPage ..> BudgetApp : loginSuccess =true/false
 
 Dashboard ..> BudgetApp : exit
 Dashboard --> Backend : add/view transactions
