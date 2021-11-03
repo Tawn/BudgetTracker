@@ -68,4 +68,7 @@ LoginPage --> Backend : verify/insert user
 
 Dashboard ..> BudgetApp : exit
 Dashboard --> Backend : add/view transactions
+
+Backend ..> LoginPage : userExist=true/false
+Backend ..> Dashboard : balance/transactions
 @enduml
